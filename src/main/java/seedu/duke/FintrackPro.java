@@ -4,9 +4,12 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.Scanner;
 
+/**
+ * FintrackPro is a CLI program that helps users estimate savings required for their share of a BTO downpayment.
+ */
 public class FintrackPro {
     /**
-     * Main entry-point for the java.duke.Duke application.
+     * Runs the FintrackPro program.
      */
     public static void main(String[] args) {
         String logo = """
@@ -19,7 +22,7 @@ public class FintrackPro {
            /|\\         /|\\
            / \\         / \\
       Secure the Keys, Secure the Dream
-    """;
+            """;
         System.out.println("Welcome to Fintrack Pro!\n" + logo);
         System.out.println("I am FinBro's brother, FinTrack Pro!");
 
@@ -30,7 +33,8 @@ public class FintrackPro {
         System.out.println("Nice to meet you, " + name + "!");
 
         System.out.println("Hang tight... I have a few questions for you.");
-        System.out.println("What is your total amount that you and your partner has to pay for the downpayment? (in dollars)");
+        System.out.println("What is your total amount that you and your partner"
+                + " has to pay for the downpayment? (in dollars)");
         double goal = Double.parseDouble(in.nextLine());
 
         double legalFees = goal * 0.025;
@@ -50,10 +54,10 @@ public class FintrackPro {
         System.out.println("\nYou can now type anything you want");
         System.out.println("Type 'bye' to exit! \n");
 
-        while(true){
+        while(true) {
             String input = in.nextLine();
             if (input.equalsIgnoreCase("bye")){
-                System.out.println("Goodbye " + name + ". Stay disciplines and get that house that you always wanted!");
+                System.out.println("Goodbye " + name + ". Stay disciplined and get that house that you always wanted!");
                 break;
             }
             System.out.println("You said: " + input);
