@@ -9,8 +9,22 @@ I am FinBro's brother, FinTrack Pro!
 What is your name?
 Nice to meet you, James Gosling!
 Hang tight... I have a few questions for you.
-What is your total amount that you and your partner has to pay for the downpayment? (in dollars)
-Sweeeett. Including 2.5% legal fees, you will need $29725.0
+What is the total amount that you and your partner have to pay for the downpayment? (in dollars)
+Bruh I need a valid amount like 10250 or 10250.50 (numbers only, max 2 dp). Try again.
+What is the total amount that you and your partner have to pay for the downpayment? (in dollars)
+Bruh I need a valid amount like 10250 or 10250.50 (numbers only, max 2 dp). Try again.
+What is the total amount that you and your partner have to pay for the downpayment? (in dollars)
+Bruh I need a valid amount like 10250 or 10250.50 (numbers only, max 2 dp). Try again.
+What is the total amount that you and your partner have to pay for the downpayment? (in dollars)
+Bruh I need a valid amount like 10250 or 10250.50 (numbers only, max 2 dp). Try again.
+What is the total amount that you and your partner have to pay for the downpayment? (in dollars)
+Sweeeett. Including 2.5% legal fees, you will need $29,725.00
+When do you need to save this money by? (Enter in format YYYY-MM-DD)
+Deadline must be a future date. Try again.
+When do you need to save this money by? (Enter in format YYYY-MM-DD)
+Date format needs to be YYYY-MM-DD (e.g., 2026-12-31). Try again.
+When do you need to save this money by? (Enter in format YYYY-MM-DD)
+Date format needs to be YYYY-MM-DD (e.g., 2026-12-31). Try again.
 When do you need to save this money by? (Enter in format YYYY-MM-DD)
 You have 1 years and 7 months remaining.
 
