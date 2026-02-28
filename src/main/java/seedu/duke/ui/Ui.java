@@ -37,5 +37,6 @@ public class Ui {
     public void showHelpMessage() {
         printLine("'bye' - exit the program");
         printLine("'help' - view all current commands");
+        printLine("'add <value(to 2dp)> - add expense for the month");
     }
 }
