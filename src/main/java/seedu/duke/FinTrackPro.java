@@ -14,7 +14,7 @@ public class FinTrackPro {
     private final Ui ui;
     private final Profile profile = new Profile();
 
-    public FinTrackPro(Ui ui){
+    public FinTrackPro(Ui ui) {
         this.ui = ui;
     }
 
@@ -78,25 +78,25 @@ public class FinTrackPro {
         String command = Parser.parseCommand(userInput);
 
         switch (command) {
-            case "salary":
-                handleSalary(in);
-                break;
-            case "savings":
-                handleSavings(in);
-                break;
-            case "ratio":
-                handleRatio(in);
-                break;
-            case "category":
-                //addCategoryToExpense();
-                break;
-            case "help":
-                ui.showHelpMessage();
-                break;
-            default:
-                ui.printLine("Unknown command. You said: " + userInput);
+        case "salary":
+            handleSalary(in);
+            break;
+        case "savings":
+            handleSavings(in);
+            break;
+        case "ratio":
+            handleRatio(in);
+            break;
+        case "category":
+            // addCategoryToExpense();
+            break;
+        case "help":
+            ui.showHelpMessage();
+            break;
+        default:
+            ui.printLine("Unknown command. You said: " + userInput);
+            break;
         }
-
     }
 
     private void handleSalary(Scanner in) {
