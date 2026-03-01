@@ -33,12 +33,12 @@ public class InputUtil {
 
             try {
                 BigDecimal amount = new BigDecimal(moneyString);
-
+                BigDecimal downPayment = amount.multiply(new BigDecimal("0.025"));
                 if (amount.compareTo(BigDecimal.ZERO) < 0) {
                     ui.printLine("The amount cannot be negative. Please try again.");
                     continue;
                 }
-                return amount;
+                return downPayment;
             } catch (NumberFormatException e) {
                 ui.printLine("Invalid number. Please try again!");
             }
