@@ -5,19 +5,20 @@ import java.util.ArrayList;
 
 public class ExpenseList {
     //List to save expenses
-    private final ArrayList<BigDecimal> expenses = new ArrayList<>();
+    private final ArrayList<Expense> expenses = new ArrayList<>();
     //place to store total
     private BigDecimal total = BigDecimal.ZERO;
 
     public void add(BigDecimal amount){
-        expenses.add(amount);
+        Expense expense = new Expense(amount);
+        expenses.add(expense);
         total = total.add(amount);
     }
 
-    public BigDecimal delete(int indexInList){
+    public Expense delete(int indexInList){
         int indexToDelete = indexInList - 1;
-        BigDecimal removed = expenses.remove(indexToDelete);
-        total = total.subtract(removed);
+        Expense removed = expenses.remove(indexToDelete);
+        total = total.subtract(removed.getAmount());
         return removed;
     }
     public BigDecimal getTotal(){
