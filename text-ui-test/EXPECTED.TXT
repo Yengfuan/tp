@@ -35,6 +35,9 @@ Any non-command word would be echoed back to you you you
 You said: hello
 'bye' - exit the program
 'help' - view all current commands
+'salary' - view and update your monthly salary
+'savings' - view and update your total current savings
+'ratio' - view and update your individual BTO contribution share
 'add' <value(to 2dp)> - add expense for the month
 'delete' <index in list> - delete the expense in the specified index
 Goodbye James Gosling. Stay disciplined and get that house that you always wanted!
