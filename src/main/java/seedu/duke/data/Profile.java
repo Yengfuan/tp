@@ -14,7 +14,7 @@ public class Profile {
     private double contributionRatio;
 
     /**
-     * Initialises a profile with zero Salary/Savings and a default 50/50 split ratio.
+     * Initializes a profile with zero Salary/Savings and a default 50/50 split ratio.
      */
     public Profile() {
         this.monthlySalary = BigDecimal.ZERO;

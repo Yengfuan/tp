@@ -9,22 +9,75 @@ import java.time.format.DateTimeParseException;
 import java.util.Locale;
 import java.util.Scanner;
 
+/**
+ * Utility class for validated user input handling in FinTrackPro.
+ *
+ * <p>Provides helper methods to:
+ * <ul>
+ *   <li>Format monetary values consistently</li>
+ *   <li>Read and validate monetary inputs</li>
+ *   <li>Read and validate future dates</li>
+ * </ul>
+ * </p>
+ *
+ * <p>This class performs input validation loops and only returns values
+ * once valid input has been received.</p>
+ */
 public class InputUtil {
     private static final NumberFormat MONEY_FMT =
             NumberFormat.getCurrencyInstance(Locale.US);
 
-    // to make sure that it is always 2dp + comma separator (eg 12,250.00)
+    /**
+     * Formats a monetary amount using US currency formatting.
+     *
+     * <p>Ensures:
+     * <ul>
+     *   <li>Two decimal places</li>
+     *   <li>Comma thousands separator</li>
+     *   <li>Currency symbol prefix</li>
+     * </ul>
+     * Example: 12250 -> $12,250.00</p>
+     *
+     * @param amount Monetary value to format.
+     * @return Formatted currency string.
+     */
     public static String formatMoney(BigDecimal amount) {
         return MONEY_FMT.format(amount);
     }
 
+    /**
+     * Prompts the user to enter a monetary value and validates the input.
+     *
+     * <p>Accepted formats:
+     * <ul>
+     *   <li>Whole numbers (e.g., 10250)</li>
+     *   <li>Numbers with up to 2 decimal places (e.g., 10250.5, 10250.50)</li>
+     * </ul>
+     * </p>
+     *
+     * <p>Rejected inputs include:
+     * <ul>
+     *   <li>Negative numbers</li>
+     *   <li>More than 2 decimal places</li>
+     *   <li>Currency symbols or commas</li>
+     *   <li>Malformed numeric strings</li>
+     * </ul>
+     * </p>
+     *
+     * <p>This method repeatedly prompts until valid input is received.</p>
+     *
+     * <p>Note: The returned value represents 2.5% of the entered amount
+     * (calculated as amount × 0.025).</p>
+     *
+     * @param ui UI component used for displaying prompts and messages.
+     * @param in Scanner used to read user input.
+     * @param prompt Prompt message shown to the user.
+     * @return 2.5% of the validated monetary amount.
+     */
     public static BigDecimal readMoney(Ui ui, Scanner in, String prompt) {
         while (true) {
             String moneyString = ui.readLine(in,prompt).trim();
 
-            // Only digits, optionally ".digits" (1-2 dp)
-            // Allows: "10250", "10250.5", "10250.50"
-            // Rejects: "-1", "10,250", "$100", "12.345", "12.", ".50", "12 3", "abc"
             if (!moneyString.matches("\\d+(\\.\\d{1,2})?")) {
                 ui.printLine("Bruh I need a valid amount like " +
                         "10250 or 10250.50 (numbers only, max 2 dp). Try again.");
@@ -45,6 +98,23 @@ public class InputUtil {
         }
     }
 
+    /**
+     * Prompts the user to enter a future date in ISO format (YYYY-MM-DD).
+     *
+     * <p>Validation rules:
+     * <ul>
+     *   <li>Input must follow the format YYYY-MM-DD</li>
+     *   <li>Date must be strictly after today's date</li>
+     * </ul>
+     * </p>
+     *
+     * <p>If validation fails, the user is re-prompted until valid input is provided.</p>
+     *
+     * @param ui UI component used for displaying prompts and messages.
+     * @param in Scanner used to read user input.
+     * @param prompt Prompt message shown to the user.
+     * @return A {@link LocalDate} that is strictly after today.
+     */
     public static LocalDate readFutureDate(Ui ui, Scanner in, String prompt) {
         while (true) {
             String s = ui.readLine(in, prompt).trim();

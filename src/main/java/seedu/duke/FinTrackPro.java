@@ -9,8 +9,20 @@ import seedu.duke.data.ExpenseList;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.Scanner;
+import java.math.RoundingMode;
 import java.math.BigDecimal;
 
+/**
+ * Main application controller for FinTrackPro.
+ *
+ * <p>Handles the interactive CLI workflow:
+ * greets the user, collects initial BTO goal + deadline, then enters a command loop.
+ * Commands are parsed and dispatched to handlers that update the user's {@link Profile}
+ * and manage the {@link ExpenseList}.</p>
+ *
+ * <p>This class does not store persistent data by itself; it operates on in-memory
+ * {@code Profile} and {@code ExpenseList} instances.</p>
+ */
 public class FinTrackPro {
 
     private final Ui ui;
@@ -21,6 +33,18 @@ public class FinTrackPro {
         this.ui = ui;
     }
 
+    /**
+     * Starts the FinTrackPro CLI session.
+     *
+     * <p>This method:
+     * <ul>
+     *   <li>Displays the welcome screen and prompts for the user's name</li>
+     *   <li>Prompts for the BTO target amount and computes additional legal fees</li>
+     *   <li>Prompts for a future deadline date and shows time remaining</li>
+     *   <li>Enters the main command loop until the user types {@code bye}</li>
+     * </ul>
+     * </p>
+     */
     public void run() {
         ui.showWelcome();
         Scanner in = new Scanner(System.in);
@@ -38,7 +62,7 @@ public class FinTrackPro {
                 "What is the total value that you and your partner have to pay for "
                         + "the house? (in dollars)");
 
-        BigDecimal legalFees = goal.multiply(new BigDecimal("1.1"));
+        BigDecimal legalFees = goal.multiply(BigDecimal.valueOf(1.1));
         BigDecimal totalRequired = goal.add(legalFees);
 
         ui.printLine("Sweeeett. Including legal fees, you will need "
@@ -75,6 +99,16 @@ public class FinTrackPro {
         in.close();
     }
 
+    /**
+     * Parses and dispatches a single line of user input.
+     *
+     * <p>If the input does not match a supported command, it is echoed back to the user.
+     * Empty/whitespace-only input is rejected.</p>
+     *
+     * @param userInput Raw line entered by the user.
+     * @param in Scanner used for follow-up prompts for commands that require more input
+     *           (e.g., salary, savings, ratio, clear).
+     */
     private void handleCommand(String userInput, Scanner in) {
         if (userInput.trim().isEmpty()) {
             ui.printLine("Cannot process empty description!");
@@ -122,6 +156,21 @@ public class FinTrackPro {
         }
     }
 
+    /**
+     * Adds an expense entry into the {@link ExpenseList}.
+     *
+     * <p>Expected format: {@code add <amount>}</p>
+     * <ul>
+     *   <li>Rejects missing amount</li>
+     *   <li>Rejects non-numeric amount</li>
+     *   <li>Rejects negative values</li>
+     *   <li>Rejects values with more than 2 decimal places</li>
+     * </ul>
+     *
+     * <p>On success, prints the new expense and the updated running total.</p>
+     *
+     * @param userInput Full command line entered by the user (starting with {@code add}).
+     */
     private void handleAdd(String userInput){
         String rest = userInput.substring("add".length()).trim();
         //if there is no input after add
@@ -158,6 +207,19 @@ public class FinTrackPro {
 
     }
 
+    /**
+     * Deletes an expense entry from the {@link ExpenseList} by 1-based index.
+     *
+     * <p>Expected format: {@code delete <index>}</p>
+     * <ul>
+     *   <li>Rejects non-integer indices</li>
+     *   <li>Rejects out-of-range indices</li>
+     * </ul>
+     *
+     * <p>On success, prints the removed entry and the updated running total.</p>
+     *
+     * @param userInput Full command line entered by the user (starting with {@code delete}).
+     */
     private void handleDelete(String userInput){
         String rest = userInput.substring("delete".length()).trim();
 
@@ -179,6 +241,16 @@ public class FinTrackPro {
         ui.printLine("Current Total: $" + expenseList.getTotal());
     }
 
+    /**
+     * Clears all expenses from the {@link ExpenseList} after user confirmation.
+     *
+     * <p>This method prompts the user with a confirmation question.
+     * Only a response of {@code "y"} (case-insensitive after trimming) will proceed.</p>
+     *
+     * <p>Side effect: Mutates the {@link ExpenseList} by removing all entries if confirmed.</p>
+     *
+     * @param in Scanner used to read the user's confirmation response.
+     */
     private void handleClear(Scanner in) {
         ui.printLine("WARNING: This will permanently delete ALL expenses. Are you sure? (Y/N)");
         String response = in.nextLine().trim().toLowerCase();
@@ -190,6 +262,14 @@ public class FinTrackPro {
         }
     }
 
+    /**
+     * Prints the current expense list and total expenditure.
+     *
+     * <p>If the list is empty, prints a message indicating no expenses exist.</p>
+     *
+     * <p>Also checks the user's spending goal from {@link Profile}.
+     * If total expenditure exceeds the goal, prints an alert with the exceeded amount.</p>
+     */
     private void printList(){
         if (expenseList.isEmpty()) {
             ui.printLine("Your expense list is as empty as my wallet. Go spend some money!");
@@ -214,6 +294,25 @@ public class FinTrackPro {
         }
     }
 
+    /**
+     * Displays or updates the user's spending goal.
+     *
+     * <p>Usage:
+     * <ul>
+     *   <li>{@code goal} - displays the current goal and help text</li>
+     *   <li>{@code goal <amount>} - updates the goal to the given amount</li>
+     * </ul></p>
+     *
+     * <p>Validation:
+     * <ul>
+     *   <li>Rejects non-numeric amounts</li>
+     *   <li>Rejects negative goals</li>
+     * </ul></p>
+     *
+     * <p>If the current total expenditure already exceeds the new goal, prints an alert.</p>
+     *
+     * @param userInput Full command line entered by the user (starting with {@code goal}).
+     */
     private void handleGoal(String userInput) {
         String rest = userInput.substring("goal".length()).trim();
 
@@ -246,6 +345,13 @@ public class FinTrackPro {
         }
     }
 
+    /**
+     * Displays the user's current monthly salary and prompts for an updated value.
+     *
+     * <p>Uses {@link InputUtil#readMoney(Ui, Scanner, String)} for input parsing and validation.</p>
+     *
+     * @param in Scanner used to read the user's salary input.
+     */
     private void handleSalary(Scanner in) {
         // Show previous input
         BigDecimal current = profile.getMonthlySalary();
@@ -258,6 +364,13 @@ public class FinTrackPro {
         ui.printLine("Salary successfully updated to: " + InputUtil.formatMoney(newAmount));
     }
 
+    /**
+     * Displays the user's current savings and prompts for an updated value.
+     *
+     * <p>Uses {@link InputUtil#readMoney(Ui, Scanner, String)} for input parsing and validation.</p>
+     *
+     * @param in Scanner used to read the user's savings input.
+     */
     private void handleSavings(Scanner in) {
         // Show previous input
         BigDecimal current = profile.getCurrentSavings();
@@ -270,6 +383,16 @@ public class FinTrackPro {
         ui.printLine("Savings successfully updated to: " + InputUtil.formatMoney(newAmount));
     }
 
+    /**
+     * Displays and updates the user's BTO contribution ratio (share of payment).
+     *
+     * <p>Prompts the user for a decimal value (e.g., 0.6 for 60%). If parsing fails,
+     * the ratio remains unchanged and a message is printed.</p>
+     *
+     * <p>Note: This method currently does not enforce a numeric range (0.0 to 1.0).</p>
+     *
+     * @param in Scanner used to read the user's ratio input.
+     */
     private void handleRatio(Scanner in) {
         double current = profile.getContributionRatio();
         ui.printLine("Current BTO contribution share: " + (current * 100) + "%");
@@ -284,6 +407,20 @@ public class FinTrackPro {
         }
     }
 
+    /**
+     * Prints a summary "BTO Readiness Report" based on the user's financial profile.
+     *
+     * <p>Computes:
+     * <ul>
+     *   <li>Distance to the BTO goal (goal - current savings)</li>
+     *   <li>Monthly surplus (monthly salary - total spent)</li>
+     *   <li>Percentage progress towards goal</li>
+     *   <li>Estimated time to reach goal in months (ceiling division)</li>
+     * </ul></p>
+     *
+     * <p>If the goal is already reached, prints a success message.
+     * If monthly surplus is zero/negative, prints that the estimate is effectively infinite.</p>
+     */
     private void handleSummary() {
         BigDecimal btoGoal = profile.getBtoGoal();
         BigDecimal currentSavings = profile.getCurrentSavings();
@@ -295,8 +432,8 @@ public class FinTrackPro {
 
         int percentage = 0;
         if (btoGoal.compareTo(BigDecimal.ZERO) > 0) {
-            percentage = currentSavings.multiply(new BigDecimal("100"))
-                    .divide(btoGoal, 0, BigDecimal.ROUND_HALF_UP)
+            percentage = currentSavings.multiply(BigDecimal.valueOf(100))
+                    .divide(btoGoal, 0, RoundingMode.HALF_UP)
                     .intValue();
         }
 
@@ -306,7 +443,7 @@ public class FinTrackPro {
         } else if (monthlySurplus.compareTo(BigDecimal.ZERO) <= 0) {
             estimate = "Infinite (Surplus is $0 or negative!)";
         } else {
-            int months = distance.divide(monthlySurplus, 0, BigDecimal.ROUND_CEILING).intValue();
+            int months = distance.divide(monthlySurplus, 0, RoundingMode.CEILING).intValue();
             estimate = months + " months";
         }
 

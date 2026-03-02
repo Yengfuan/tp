@@ -8,7 +8,7 @@ import seedu.duke.ui.Ui;
 public class Duke {
 
     /**
-     * Runs the Duke program which runs Fintrackpro
+     * Runs the Duke program which runs FinTrackPro
      */
     public static void main(String[] args){
         Ui ui = new Ui();
