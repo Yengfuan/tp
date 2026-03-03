@@ -53,7 +53,7 @@ public class Expense implements Category{
 
     /**
      * Returns a visual icon representing the expense category.
-     * * @return The first letter of the category name as a String.
+     * @return The first letter of the category name as a String.
      */
     @Override
     public String getTypeIcon() {

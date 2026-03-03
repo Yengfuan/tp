@@ -481,7 +481,7 @@ public class FinTrackPro {
 
     /**
      * Completely resets the user profile and expense list after confirmation.
-     * * @param in Scanner used for user confirmation.
+     * @param in Scanner used for user confirmation.
      */
     private void handleReset(Scanner in) {
         ui.printLine("WARNING: This will wipe your profile and ALL expenses. Continue? (Y/N)");
