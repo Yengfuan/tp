@@ -470,6 +470,8 @@ public class FinTrackPro {
         }
 
         ui.printLine("======= BTO Readiness Report ====");
+        ui.printLine("User: " + profile.getName());
+        ui.printLine("Monthly Salary: " + InputUtil.formatMoney(monthlySalary));
         ui.printLine("Current Goal: " + InputUtil.formatMoney(btoGoal) + " (your share + fees)");
         ui.printLine("Current Savings: " + InputUtil.formatMoney(currentSavings) + " (" + percentage + "% reached)");
         ui.printLine("Distance to Goal: " + InputUtil.formatMoney(distance));
